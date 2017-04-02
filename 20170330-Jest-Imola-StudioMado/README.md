@@ -1,7 +1,7 @@
 # Jest - Painless Javascript Testing
-Data: 30 marzo 2017 
-Location: Studio Mado, Imola
-Speaker: Andrea Verlicchi
+- Data: 30 marzo 2017 
+- Location: Studio Mado, Imola
+- Speaker: Andrea Verlicchi
 
 Questo è il codice creato insieme durante la demo di
 [Jest](https://facebook.github.io/jest/) che abbiamo scritto insieme durante
