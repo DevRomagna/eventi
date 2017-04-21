@@ -1,4 +1,4 @@
 Contributors
 ------------
-Andrea Verlicchi
-Simone Gentili
+- Andrea Verlicchi
+- Simone Gentili
