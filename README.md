@@ -41,7 +41,7 @@
     romagnolo.
 
 ## Classifica eventi più votati
-La classifica dei dei talk/eventi più votati è disponibile a [qui][2].
+La classifica dei dei talk/eventi più votati è disponibile [qui][2].
 
 [1]: https://github.com/DevRomagna/eventi/issues/new
 [2]: https://github.com/DevRomagna/eventi/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc
