@@ -1,6 +1,8 @@
 # Contributors
 
 - Andrea Verlicchi
+- Claudio Comandini 
+- Francesco Strazzullo 
 - Marco Radossi
 - Nicola Iarocci
-- Simone Gentili
+- Nicola Iarocci 
