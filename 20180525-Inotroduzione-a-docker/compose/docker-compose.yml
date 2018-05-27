@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  websrv:
+    build:
+      context: ./websrv/
+    container_name: websrv
+    ports:
+      - "8073:80"
+    links:
+      - db
+  db:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - /tmp/db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=docker
+      - MYSQL_DATABASE=docker
