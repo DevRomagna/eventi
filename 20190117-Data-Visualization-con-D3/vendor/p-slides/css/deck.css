@@ -1,0 +1,113 @@
+:host {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template: 100% / 100%;
+  justify-items: center;
+  align-items: center;
+  color: #222;
+  --speaker-next-scale: .66667;
+}
+aside {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: calc(100% * var(--speaker-next-scale));
+  color: white;
+  flex-direction: column;
+}
+header {
+  font-size: 87.5%;
+  text-align: center;
+  background: #111;
+  margin-bottom: .25em;
+  flex: 0 0 auto;
+}
+ul {
+  background: #111;
+  margin: 0;
+  padding: .5em .5em .5em 1.5em;
+  flex: 1 0 auto;
+  overflow: auto;
+  font-size: 50%;
+}
+li {
+  transition: opacity var(--fragment-duration);
+}
+li:only-child {
+  list-style-type: none;
+  margin-left: -1em;
+}
+li.not-visible {
+  opacity: .5;
+}
+span:nth-child(2) { font-size: 70%; }
+span:nth-child(2)::before { content: "/"; }
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: .75em;
+  color: inherit;
+  width: 1em;
+  height: 1em;
+  box-sizing: border-box;
+  position: relative;
+}
+button:first-of-type {
+  border-style: solid;
+  border-color: transparent currentColor;
+  border-width: .5em 0 .5em 1em;
+  vertical-align: .5em;
+}
+time[running] + button:first-of-type {
+  border-width: 0 .33em;
+  vertical-align: 0;
+}
+button:last-of-type::before,
+button:last-of-type::after {
+  content: "";
+  width: .25em;
+  height: 1em;
+  background: currentColor;
+  position: absolute;
+  top: 0;
+  left: .375em;
+  transform: rotate(45deg);
+}
+button:last-of-type::after {
+  transform: rotate(-45deg);
+}
+
+:host([mode="speaker"]) {
+  background: black;
+}
+:host([mode="speaker"]) ::slotted(p-slide) {
+  animation: none !important;
+  display: none;
+}
+:host([mode="speaker"]) ::slotted(p-slide[active]) {
+  display: flex;
+  transform: scale(calc(1 - var(--speaker-next-scale)));
+  position: relative;
+  top: calc(var(--speaker-next-scale) * -50%);
+  left: calc(var(--speaker-next-scale) * 50% - 50%);
+  opacity: .5;
+}
+:host([mode="speaker"]) ::slotted(p-slide[next]) {
+  display: flex;
+  transform: scale(var(--speaker-next-scale));
+  position: relative;
+  top: calc(50% - var(--speaker-next-scale) * 50%);
+  left: calc(var(--speaker-next-scale) * 50% - 50%);
+}
+:host([mode="speaker"]) aside {
+  display: flex;
+}

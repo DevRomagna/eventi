@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Data visualization with D3</title>
+  <base href="..">
+  <link rel="shortcut icon" href="img/d3-logo.png" type="image/png">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <link rel="stylesheet" href="css/presentation.css">
+  <link rel="stylesheet" href="vendor/prismjs/themes/prism-okaidia.css">
+</head>
+
+<body>
+  <p-deck>
+    <p-slide class="cover">
+  <h3>
+    Data visualization with D3.js
+    <small>Imola, 2019-01-17</small>
+  </h3>
+  <div>
+    <img src="img/d3-logo.svg" alt="Logo of D3.js">
+    <img src="img/devromagna.svg" alt="Logo of DevRomagna.js">
+  </div>
+</p-slide>
+<p-slide class="justify-start">
+  <img src="img/logo-antreem-border.svg" alt="Antreem logo" class="antreem-logo">
+  <div class="my-data">
+    <img src="img/maxart.jpg" alt="My face" class="my-face">
+    <h2>Massimo Artizzu</h2>
+    <p>
+      Web dev &amp; architect<br>
+      at <a href="https://antreem.com">Antreem</a>
+    </p>
+  </div>
+  <div class="my-info">
+    <h4>
+      <img src="img/twitter.svg" alt="Twitter logo"> /
+      <img src="img/github.svg" alt="GitHub logo">
+      @MaxArt2501
+    </h4>
+  </div>
+</p-slide>
+<p-slide class="center">
+  <h3>You can find these slides at</h3>
+  <img src="img/qr-slides.svg" alt="QR Code for the presentation's link" style="height: 7em; margin-bottom: 1em;">
+  <a href="https://maxart2501.github.io/d3-talk/devromagna/">maxart2501.github.io/d3-talk/devromagna/</a>
+</p-slide>
+    <p-slide>
+  <h2 class="our-header">What <em>is</em> D3.js? 🤔</h2>
+  <img src="img/d3.png" alt="Charts made with D3.js" style="width: 100%;">
+</p-slide>
+<p-slide class="justify-center center">
+  <h1>It's <em>not</em></h1>
+  <p-fragment>
+    <h1>a chart library 😱</h1>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <h2 class="our-header">It's a <em>data visualization</em> library</h2>
+  <ul class="self-center center">
+    <li><p-fragment>You <em>can</em> draw charts&hellip;</p-fragment></li>
+    <li><p-fragment>&hellip; or not!</p-fragment></li>
+  </ul>
+</p-slide>
+<p-slide>
+  <h2 class="our-header">D3 = DDD = &hellip;</h2>
+  <ul class="self-center">
+    <li><p-fragment>Data</p-fragment></li>
+    <li><p-fragment>Driven</p-fragment></li>
+    <li><p-fragment>Document</p-fragment></li>
+  </ul>
+</p-slide>
+    <p-slide>
+  <h3 class="our-header">Loading: the classic way</h3>
+  <pre class="self-center"><code class="language-html">&lt;script src="d3-array.min.js">&lt;/script>
+&lt;script src="d3-collection.min.js">&lt;/script>
+&lt;script src="d3-color.min.js">&lt;/script>
+&lt;script src="d3-format.min.js">&lt;/script>
+&lt;script src="d3-interpolate.min.js">&lt;/script>
+&lt;script src="d3-time.min.js">&lt;/script>
+&lt;script src="d3-time-format.min.js">&lt;/script>
+&lt;script src="d3-scale.min.js">&lt;/script></code>
+
+<p-fragment><code class="language-js">d3.select('rect') ...</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Loading: the module way</h3>
+  <pre class="self-center"><code class="language-js">import { select } from 'd3-selection';
+import { scaleLinear } from 'd3-scale';
+import { axisLeft } from 'd3-axis';
+import { arc, pie } from 'd3-shape';</code>
+
+<p-fragment><code class="language-js">const scale = scaleLinear();
+select('rect') ...</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h2 class="our-header">The basics</h2>
+  <h4><code>select</code> and friends</h4>
+  <p-fragment>
+    <p>Think of jQuery&hellip;</p>
+  </p-fragment>
+  <p-fragment>
+    <p>&hellip; but it sucks 🤦‍♂️</p>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <pre class="self-center"><code class="language-js">import { select } from 'd3-selection';</code>
+
+<p-fragment><code class="language-js">const app = select('#app')</code></p-fragment>
+    <p-fragment><code class="language-js">.text('Hello, world!')</code></p-fragment>
+    <p-fragment><code class="language-js">.attr('id', 'hello')</code></p-fragment>
+    <p-fragment><code class="language-js">.classed('done', true);</code></p-fragment>
+
+<p-fragment><code class="language-js">const chk = app.append('input')</code></p-fragment>
+    <p-fragment><code class="language-js">.attr('type', 'checkbox')
+    .property('checked', true)</code></p-fragment>
+    <p-fragment><code class="language-js">.on('click', handleClick);</code></p-fragment>
+</pre>
+</p-slide>
+<p-slide>
+  <pre class="self-center big"><code class="language-js">import { select, selectAll } from 'd3-selection';</code>
+
+<p-fragment><code class="language-js">selectAll('.power-of-2 li')</code></p-fragment>
+    <p-fragment><code class="language-js">.attr('data-index', (_, i) => i)</code></p-fragment>
+    <p-fragment><code class="language-js">.each(function(_, i) {</code>
+        <p-fragment><code class="language-js">const li = select(this);</code></p-fragment>
+        <p-fragment><code class="language-js">li.append('span').text(2 ** i);</code></p-fragment>
+    });</p-fragment></pre>
+</p-slide>
+<p-slide>
+  <iframe data-lazy-src="https://codesandbox.io/embed/2p3o13jx5j?fontsize=24" style="width:100%; height:100%; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+  <a class="self-center" href="https://codesandbox.io/s/2p3o13jx5j">codesandbox.io/s/2p3o13jx5j</a>
+</p-slide>
+    <p-slide>
+  <h2 class="our-header">Data joins</h2>
+</p-slide>
+<p-slide>
+  <div class="columns">
+    <pre class="big"><code class="language-html">&lt;ul id="names">&lt;/ul></code>
+
+<p-fragment><code class="language-js">const names = [
+  'Alice',
+  'Bruno',
+  'Camilla'
+];</code></p-fragment></pre>
+    <p-fragment>
+      <ul>
+        <li>◾ Alice</li>
+        <li>◾ Bruno</li>
+        <li>◾ Camilla</li>
+      </ul>
+    </p-fragment>
+  </div>
+</p-slide>
+<p-slide>
+  <pre class="big self-center"><code class="language-js">const items = select('ul#names')</code>
+  <p-fragment><code class="language-js">.selectAll('li.name')  // 😮</code></p-fragment>
+  <p-fragment><code class="language-js">.data(names);          // 🤔</code></p-fragment>
+
+<p-fragment><code class="language-js">items.enter()</code></p-fragment>
+  <p-fragment><code class="language-js">.append('li')
+  .attr('class', 'name')</code></p-fragment>
+  <p-fragment><code class="language-js">.text((name, i) => name);</code></p-fragment></pre>
+  <p-fragment class="self-center">
+    <p><code>items</code> is a so-called <em>data join</em>.</p>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <svg viewBox="0 0 720 240" style="height: 60%; font-size: 20%;">
+    <g transform="translate(0,128)">
+      <g transform="translate(300)">
+        <circle r="110" style="stroke: currentColor; stroke-width: 1.5px; fill: rgba(49, 130, 189, .4);"></circle>
+        <text y="-120" dy=".35em" text-anchor="middle" style="font-weight: bold;">Data</text>
+        <text x="-50" dy=".35em" text-anchor="middle">Enter</text>
+      </g>
+      <g transform="translate(420)">
+        <circle r="110" style="stroke: currentColor; stroke-width: 1.5px; fill: rgba(255, 102, 0, .4);"></circle>
+        <text y="-120" dy=".35em" text-anchor="middle" style="font-weight: bold;">Elements</text>
+        <text x="50" dy=".35em" text-anchor="middle">Exit</text>
+      </g>
+      <text x="360" dy=".35em" text-anchor="middle">Update</text>
+    </g>
+  </svg>
+  <a class="self-center" style="font-size: 50%; margin-top: 1em;" href="https://bost.ocks.org/mike/join/">Mike Bostock - Thinking with Joins</a>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Add missing elements</h3>
+  <div class="codesplain">
+    <pre><code class="language-js">items.enter()</code>
+  <p-fragment><code class="language-js">.append('li')</code></p-fragment>
+  <p-fragment index="1"><code class="language-js">.attr('class', 'name')</code></p-fragment>
+  <p-fragment index="2"><code class="language-js">.text(function(name, index) {
+    return name;
+  });</code></p-fragment></pre>
+    <aside>
+      <p-fragment class="hand">Appended to <code>ul#names</code></p-fragment>
+      <p-fragment index="1" class="hand">Must match <code>li.name</code></p-fragment>
+      <p-fragment index="2" class="hand"><code>name</code> = Alice, &hellip;</p-fragment>
+      <p-fragment index="2"><code>index</code> = 0, 1, &hellip;</p-fragment>
+      <p-fragment index="2"><code>this</code> = <code>&lt;li></code></p-fragment>
+    </aside>
+  </div>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Update existing elements</h3>
+  <div class="columns">
+    <aside>
+      <pre><code class="language-js">items</code>
+  <p-fragment><code class="language-js">.text(function(name, index) {
+    return name;
+  });</code></p-fragment></pre>
+    <p-fragment>Or in one pass&hellip;</p-fragment>
+    </aside>
+    <p-fragment>
+      <pre><code class="language-js">items
+  .enter()
+    .append('li')
+    .attr('class', 'name')
+  .merge(items)
+    .text(name => name);</code></pre></p-fragment>
+  </div>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Remove unused elements</h3>
+    <pre class="self-center big"><code class="language-js">items</code>
+  <p-fragment><code class="language-js">.exit()</code></p-fragment>
+  <p-fragment><code class="language-js">.remove();</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <iframe data-lazy-src="https://codesandbox.io/embed/x2no0j1ryp?fontsize=24" style="width:100%; height:80%; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+  <a class="self-center" href="https://codesandbox.io/s/x2no0j1ryp">codesandbox.io/s/x2no0j1ryp</a>
+</p-slide>
+    <p-slide>
+  <h2 class="our-header">Ok, but&hellip; the charts?!</h2>
+</p-slide>
+<p-slide>
+  <div class="svg-layers">
+    <svg viewBox="-400 -300 800 600" style="font-size: 25%; height: 56em;">
+      <defs>
+        <style>
+          ellipse, line {
+            fill: rgb(247, 200, 148);
+            stroke: currentColor;
+            stroke-width: 1px;
+          }
+          text {
+            dominant-baseline: central;
+            text-anchor: middle;
+          }
+        </style>
+      </defs>
+      <g transform="translate(0, -200)">
+        <line x2="0" y2="200"/>
+        <ellipse rx="75" ry="50"/>
+        <text>d3-axis</text>
+      </g>
+      <g transform="translate(212, -141)">
+        <line x2="-212" y2="141"/>
+        <ellipse rx="75" ry="50"/>
+        <text>d3-scale</text>
+      </g>
+      <g transform="translate(300, 0)">
+        <line x2="-300" y2="0"/>
+        <ellipse rx="75" ry="50"/>
+        <text>d3-hierarchy</text>
+      </g>
+      <g transform="translate(212, 141)">
+        <line x2="-212" y2="-141"/>
+        <ellipse rx="75" ry="50"/>
+        <text>d3-geo</text>
+      </g>
+      <g transform="translate(0, 200)">
+        <line x2="0" y2="-200"/>
+        <ellipse rx="75" ry="50"/>
+        <text>...</text>
+      </g>
+      <g transform="translate(-212, -141)">
+        <line x2="212" y2="141"/>
+        <ellipse rx="75" ry="50"/>
+        <text>d3-path</text>
+      </g>
+      <g transform="translate(-300, 0)">
+        <line x2="300" y2="0"/>
+        <ellipse rx="75" ry="50"/>
+        <text>d3-polygon</text>
+      </g>
+      <g transform="translate(-212, 141)">
+        <line x2="212" y2="-141"/>
+        <ellipse rx="75" ry="50"/>
+        <text>d3-interpolate</text>
+      </g>
+      <circle r="100" fill="#fff"/>
+    </svg>
+  </div>
+  <img src="img/d3-logo.svg" alt="Logo of D3.js" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 3em;">
+</p-slide>
+<p-slide>
+  <h2 class="our-header">Scales and axes</h2>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Types of scales</h3>
+  <p>From the package <code>d3-scale</code>:</p>
+  <ul>
+    <li><p-fragment>📈 <code>scaleLinear</code></p-fragment></li>
+    <li><p-fragment>📈 <code>scalePow</code>, <code>scaleLog</code></p-fragment></li>
+    <li><p-fragment>📈 <code>scaleTime</code></p-fragment></li>
+    <li><p-fragment>📈 <code>scaleOrdinal</code>, <code>scaleBand</code>, <code>scalePoint</code></p-fragment></li>
+    <li><p-fragment>📈 <code>scaleQuantize</code>, <code>scaleQuantile</code>, &hellip;</p-fragment></li>
+  </ul>
+</p-slide>
+<p-slide>
+  <h3 class="center">Scales are <em>functions</em></h3>
+  <div class="self-center">
+    <p>They <em>all</em> need:</p>
+    <ul>
+      <li><p-fragment>👉 a <em>domain</em>;</p-fragment></li>
+      <li><p-fragment>
+        👉 a <em>range</em>
+        <p-fragment>("codomain").</p-fragment>
+      </p-fragment></li>
+    </ul>
+  </div>
+</p-slide>
+<p-slide>
+  <pre class="self-center"><code class="language-js">import { scaleLinear } from 'd3-scale';</code>
+
+<p-fragment><code class="language-js">const scale = scaleLinear()</code></p-fragment>
+  <p-fragment><code class="language-js">.domain([ 0, 100 ])</code></p-fragment>
+  <p-fragment><code class="language-js">.range([ 50, 450 ]);</code></p-fragment>
+
+<p-fragment><code class="language-js">scale(0);     // 50
+scale(50);    // 250
+scale(12.5);  // 100
+scale(-100);  // -350</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <div class="columns">
+    <pre><code class="language-js">const points = [
+  {x: 10, y: 30}, {x: 7, y: 12},
+  {x: 24, y: 9}, {x: 14, y: 23}
+];</code>
+<p-fragment><code class="language-js">const scaleX = scaleLinear()
+  .domain([0, 40]).range([0, 200]);</code></p-fragment>
+<p-fragment><code class="language-js">const scaleY = scaleX.copy();</code></p-fragment>
+
+<p-fragment><code class="language-js">select('svg').selectAll('.point')</code></p-fragment>
+  <p-fragment><code class="language-js">.data(points).enter()</code></p-fragment>
+    <p-fragment><code class="language-js">.append('circle')
+    .attr('class', 'point')</code></p-fragment>
+    <p-fragment><code class="language-js">.attr('cx', p => scaleX(p.x))</code></p-fragment>
+    <p-fragment><code class="language-js">.attr('cy', p => scaleY(p.y));</code></p-fragment></pre>
+    <p-fragment>
+      <svg viewBox="0 0 200 200">
+        <rect width="200" height="200" fill="none" stroke="currentColor" stroke-width="1"/>
+        <circle cx="50" cy="150" r="3" fill="red"/>
+        <circle cx="35" cy="60" r="3" fill="red"/>
+        <circle cx="120" cy="45" r="3" fill="red"/>
+        <circle cx="70" cy="115" r="3" fill="red"/>
+      </svg>
+    </p-fragment>
+  </div>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Axes</h3>
+  <p>From the package <code>d3-axis</code>:</p>
+  <p-fragment class="self-center">
+    <ul>
+      <li>📈 <code>axisTop</code></li>
+      <li>📈 <code>axisRight</code></li>
+      <li>📈 <code>axisBottom</code></li>
+      <li>📈 <code>axisLeft</code></li>
+    </ul>
+  </p-fragment>
+  <p-fragment class="self-center">
+    <pre><code class="language-js">const axisY = axisLeft(scaleY);</code></pre>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <pre><code class="language-html">&lt;g fill="none" font-size="10" font-family="sans-serif" text-anchor="end">
+  &lt;path class="domain" stroke="currentColor" d="M-6,730.5H0.5V0.5H-6">&lt;/path>
+  &lt;g class="tick" opacity="1" transform="translate(0,730.5)">
+    &lt;line stroke="currentColor" x2="-6">&lt;/line>
+    &lt;text fill="currentColor" x="-9" dy="0.32em">0&lt;/text>
+  &lt;/g>
+  &lt;g class="tick" opacity="1" transform="translate(0,669.667)">
+    &lt;line stroke="currentColor" x2="-6">&lt;/line>
+    &lt;text fill="currentColor" x="-9" dy="0.32em">5&lt;/text>
+  &lt;/g>
+  ...
+&lt;/g></code></pre>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Hot to draw a chart!</h3>
+  <ul class="self-center">
+    <li><p-fragment>📈 retrive SVG sizes</p-fragment></li>
+    <li><p-fragment>📈 setup scales and axes</p-fragment></li>
+    <li><p-fragment>📈 create containers for the axes</p-fragment></li>
+    <li><p-fragment>📈 and for the chart</p-fragment></li>
+    <li><p-fragment>📈 get the data&hellip;</p-fragment></li>
+    <li><p-fragment>📈 &hellip; and draw the chart!</p-fragment></li>
+  </ul>
+</p-slide>
+    <p-slide>
+  <h2 class="our-header">Common charts</h2>
+</p-slide>
+<p-slide>
+  <p class="center">From the package <code>d3-shape</code>:</p>
+  <ul class="self-center">
+    <li><p-fragment>📈 line/area charts</p-fragment></li>
+    <li><p-fragment>📈 pie charts</p-fragment></li>
+    <li><p-fragment>📈 stacked bar charts</li>
+    <li><p-fragment>📈 link charts</li>
+  </ul>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Line charts</h3>
+</p-slide>
+<p-slide>
+  <pre class="self-center"><code class="language-js">import { line } from 'd3-shape';
+const data = [
+  [ 19, 19, 24, 13, 20, 24, 14, 57, 16, 60 ],
+  [ 13, 36, 14, 24, 31, 18, 26, 40, 10, 29 ],
+  [ 43, 18, 15, 30, 21, 19, 65, 20, 18, 14 ]
+];</code>
+<p-fragment><code class="language-js">const dataLine = line()</code></p-fragment>
+  <p-fragment><code class="language-js">.x((_, i) => scaleX(i))</code></p-fragment>
+  <p-fragment><code class="language-js">.y(d => scaleY(d));</code></p-fragment>
+<p-fragment><code class="language-js">const lines = select('g.chart')
+  .selectAll('path').data(data);</code></p-fragment>
+<p-fragment><code class="language-js">lines.enter()
+  .append('path')
+  .attr('d', dataLine);</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <iframe data-lazy-src="https://codesandbox.io/embed/lyyrll692m?fontsize=24" style="width:100%; height:100%; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+  <a class="self-center" href="https://codesandbox.io/s/lyyrll692m">codesandbox.io/s/lyyrll692m</a>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Pie charts</h3>
+</p-slide>
+<p-slide>
+  <h4 class="center">Disclaimer:</h4>
+  <p-fragment>
+    <h3 class="center">Don't make pie charts.</h3>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <pre class="self-center"><code class="language-js">import { arc, pie } from 'd3-shape';
+const data = [ 32, 140, 4, 13, 36, 6, 17, 24, 19, 37 ];</code>
+<p-fragment><code class="language-js">const pieData = pie()(data);</code></p-fragment>
+<p-fragment><code class="language-js">const sectorArc = arc()</code></p-fragment>
+  <p-fragment><code class="language-js">.innerRadius(80)
+  .outerRadius(100)
+  .padAngle(Math.PI / 360);</code></p-fragment>
+<p-fragment><code class="language-js">const sectors = select('g.chart')
+  .selectAll('path').data(pieData);</code></p-fragment>
+<p-fragment><code class="language-js">sectors.enter()
+  .append('path')
+  .attr('d', sectorArc);</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h4 class="center">(But seriously, don't make pie charts.)</h4>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Stacked bar charts</h3>
+</p-slide>
+<p-slide>
+  <p class="center">Similarly to line charts, we have a data <em>matrix</em>:</p>
+  <pre class="self-center"><code class="language-js">const data = [
+  [ 19, 19, 24, 13, 20, 24, 14, 57, 16, 60 ],
+  [ 13, 36, 14, 24, 31, 18, 26, 40, 10, 29 ],
+  [ 43, 18, 15, 30, 21, 19, 65, 20, 18, 14 ]
+];</code></pre>
+</p-slide>
+<p-slide>
+  <p class="center">We can make a data join <em>from a data join</em>:</p>
+  <pre class="self-center"><code class="language-js">const join = chartRoot.selectAll('.group').data(data);</code>
+<p-fragment><code class="language-js">const group = join.enter()
+  .append('g').attr('class', 'group')</code></p-fragment>
+  <p-fragment><code class="language-js">.merge(join);</code></p-fragment>
+<p-fragment><code class="language-js">join.exit().remove();</code></p-fragment>
+
+<p-fragment><code class="language-js">const subjoin = group.selectAll('.value')</code></p-fragment><p-fragment><code class="language-js">.data(d => d);</code></p-fragment>
+<p-fragment><code class="language-js">subjoin.enter()
+  .append('g').attr('class', 'value')</code></p-fragment>
+  <p-fragment><code class="language-js">.merge(subjoin)...</code></p-fragment>
+<p-fragment><code class="language-js">subjoin.exit().remove();</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <iframe data-lazy-src="https://codesandbox.io/embed/2znnw8q16n?fontsize=24" style="width:100%; height:100%; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+  <a class="self-center" href="https://codesandbox.io/s/2znnw8q16n">codesandbox.io/s/2znnw8q16n</a>
+</p-slide>
+<p-slide>
+  <h4 class="center">(Just&hellip; don't abuse stacked charts either.)</h4>
+</p-slide>
+    <p-slide>
+  <h2 class="our-header">Transitions</h2>
+</p-slide>
+<p-slide>
+  <h4 class="center">Disclaimer:</h4>
+  <p-fragment>
+    <h3 class="center">You <em>can</em> use CSS to animate your charts.</h3>
+  </p-fragment>
+  <p-fragment>
+    <p class="center">Even attributes like <code>x</code>, <code>r</code> or <code>&lt;path></code>'s <code>d</code>.</p>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <h2 class="center">But</h2>
+  <p-fragment>
+    <h4 class="center">
+      It works in
+      <img src="img/chrome.svg" alt="Chrome logo" style="height: 5em; display: block; margin: 0 auto;">
+      only 🙁
+    </h4>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <h3 class="our-header"><code>d3-transition</code> to the rescue!</h3>
+  <pre class="self-center big"><code class="language-js">import { transition } from 'd3-transition';</code>
+
+<p-fragment><code class="language-js">transition()</code></p-fragment>
+  <p-fragment><code class="language-js">.select('rect')</code></p-fragment>
+  <p-fragment><code class="language-js">.attr('fill', 'red')</code></p-fragment>
+  <p-fragment><code class="language-js">.style('stroke', 'black');</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Transition of <em>what?</em></h4>
+  <ul class="self-center">
+    <li>
+      <p-fragment>⚡ Numbers:</p-fragment>
+      <p-fragment><code>0</code> &#8594; <code>100</code></p-fragment>
+    </li>
+    <li>
+      <p-fragment>⚡ Colors:</p-fragment>
+      <p-fragment><code>#f60</code> &#8594; <code>rebeccapurple</code></p-fragment>
+    </li>
+    <li>
+      <p-fragment>⚡ Lengths:</p-fragment>
+      <p-fragment><code>10px</code> &#8594; <code>120px</code></p-fragment>
+    </li>
+    <li>
+      <p-fragment>⚡ Strings:</p-fragment>
+      <p-fragment><code>M0,20L10,5</code> &#8594; <code>M0,16L12,7</code></p-fragment>
+    </li>
+  </ul>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Transition tuning</h4>
+  <ul class="self-center">
+    <li><p-fragment><code>.duration()</code></p-fragment></li>
+    <li><p-fragment><code>.delay()</code></p-fragment></li>
+    <li>
+      <p-fragment><code>.ease()</code></p-fragment>
+      <p-fragment>(see <code>d3-ease</code>)</p-fragment>
+    </li>
+  </ul>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Defining starting values</h4>
+  <div class="columns">
+    <p-fragment><pre><code class="language-js">select('rect')</code>
+  <p-fragment><code class="language-js">.attr('fill', 'red');</code></p-fragment>
+<p-fragment><code class="language-js">.transition()</code></p-fragment>
+  <p-fragment><code class="language-js">.attr('fill', 'blue');</code></p-fragment></pre></p-fragment>
+    <p-fragment><pre><code class="language-js">select('rect')</code>
+  <p-fragment><code class="language-js">.transition()</code></p-fragment>
+  <p-fragment><code class="language-js">.attrTween('fill', () =>
+    interpolate('red', 'blue')
+  );</code></p-fragment></pre></p-fragment>
+</div>
+<p-fragment><p class="center">See also <code>.styleTween()</code> and <code>.tween()</code></p></p-fragment>
+</p-slide>
+<p-slide>
+  <iframe data-lazy-src="https://codesandbox.io/embed/z375662r0p?fontsize=24" style="width:100%; height:100%; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+  <a class="self-center" href="https://codesandbox.io/s/z375662r0p">codesandbox.io/s/z375662r0p</a>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Chaining transitions</h4>
+  <p-fragment class="self-center"><pre class="big"><code class="language-js">transition()
+    .select('rect').attr('fill', 'red')</code>
+  <p-fragment><code class="language-js">.transition()
+    .attr('fill', 'blue');</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Transition events</h4>
+  <p-fragment class="self-center"><pre class="big"><code class="language-js">select('rect')
+  .transition()
+  .attr('fill', 'red')</code>
+  <p-fragment><code class="language-js">.on('end', () => {
+    console.log('All done!');
+  });</code></p-fragment></pre></p-fragment>
+  <p-fragment><p class="center">Other events: <code>start</code> and <code>interrupt</code></p></p-fragment>
+</p-slide>
+<p-slide>
+  <iframe data-lazy-src="https://codesandbox.io/embed/m5qmlpqn88?fontsize=24" style="width:100%; height:100%; border:0; overflow:hidden;" sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"></iframe>
+  <a class="self-center" href="https://codesandbox.io/s/m5qmlpqn88">codesandbox.io/s/m5qmlpqn88</a>
+</p-slide>
+    <p-slide>
+  <h2 class="our-header">D3 and modern frameworks</h2>
+</p-slide>
+<p-slide>
+  <h2 class="center">D3.js is <em>reactive</em></h2>
+</p-slide>
+<p-slide>
+  <h2 class="center">&hellip; but so are these!</h2>
+  <div class="columns">
+    <img src="img/react.svg" alt="React logo">
+    <img src="img/angular.svg" alt="Angular logo">
+    <img src="img/vue.svg" alt="Vue logo">
+  </div>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Solution #1: the black box</h4>
+  <pre class="self-center"><code class="language-js">class BarChart extends React.Component {</code>
+  <p-fragment><code class="language-js">render() {
+    return &lt;svg ref={node => this.svgRoot = node}>&lt;/svg>
+  }</code></p-fragment>
+  <p-fragment><code class="language-js">drawChart() {
+    const data = this.props.data;
+    // Use D3.js here...
+  }</code></p-fragment>
+  <p-fragment><code class="language-js">componentDidMount() { this.drawChart(); }</code></p-fragment>
+}</pre>
+</p-slide>
+<p-slide>
+  <div class="columns">
+    <aside>
+      <h1 class="center">👍</h1>
+      <ul>
+        <li><p-fragment>☝ simple enough</p-fragment></li>
+        <li><p-fragment>✌ can reuse old code</p-fragment></li>
+      </ul>
+    </aside>
+    <aside>
+      <h1 class="center">👎</h1>
+      <ul>
+        <li><p-fragment>😕 feature-redundant</p-fragment></li>
+        <li><p-fragment>🙁 "black box"</p-fragment></li>
+      </ul>
+    </aside>
+  </div>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Solution #2: functional D3</h4>
+  <pre class="self-center"><code class="language-js">class BarChart extends React.Component {</code>
+  <p-fragment><code class="language-js">constructor() {
+    this.chartLine = line()...
+  }</code></p-fragment>
+  <p-fragment><code class="language-js">render() {
+    return &lt;svg>&lt;g>
+      {this.props.data.map(row =>
+        &lt;path d={this.chartLine(row)}/>
+      )}
+    &lt;/g>&lt;/svg>
+  }</code></p-fragment>
+}</pre>
+</p-slide>
+<p-slide>
+  <div class="columns">
+    <aside>
+      <h1 class="center">👍</h1>
+      <ul>
+        <li><p-fragment>☝ better data flow</p-fragment></li>
+        <li><p-fragment>✌ more performant</p-fragment></li>
+      </ul>
+    </aside>
+    <aside>
+      <h1 class="center">👎</h1>
+      <ul>
+        <li><p-fragment>😕 unorthodox</p-fragment></li>
+        <li><p-fragment>🙁 no axes, transitions</p-fragment></li>
+      </ul>
+    </aside>
+  </div>
+</p-slide>
+<p-slide class="center">
+  <h3>What's better?</h3>
+  <p-fragment>
+    <h1>¯\_(ツ)_/¯</h1>
+  </p-fragment>
+</p-slide>
+    <p-slide>
+  <h2 class="our-header">Server-side D3</h2>
+</p-slide>
+<p-slide>
+  <img src="img/butwhy.webp" alt="'But why?' surgeon meme" class="full-media">
+</p-slide>
+<p-slide>
+  <ul class="self-center">
+    <li>☝ dynamic web charts</li>
+    <li><p-fragment>✌ batch generation</p-fragment></li>
+    <li><p-fragment>🤟 faster client side</p-fragment></li>
+  </ul>
+</p-slide>
+<p-slide class="center">
+  <h3>D3 is a <em>DOM manipulation library</em></h3>
+  <h5>How can it work on the server side?</h5>
+</p-slide>
+<p-slide>
+  <ul class="self-center big">
+    <li>☝ Functional D3 (again)</li>
+    <li><p-fragment>✌ <em>Tricked</em> into using a faux DOM</p-fragment></li>
+  </ul>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">D3-Node</h3>
+  <p-fragment>
+    <p>Two dependencies: <code>d3</code> and <code>jsdom</code></p>
+  </p-fragment>
+  <p-fragment class="self-center">
+    <pre><code class="language-js">const D3Node = require('d3-node');</code>
+<p-fragment><code class="language-js">const doc = new D3Node();
+const root = doc.createSVG();</code></p-fragment>
+
+<p-fragment><code class="language-js">const scaleX = doc.d3.scaleLinear();</code></p-fragment>
+<p-fragment><code class="language-js">const lines = root.selectAll('path').data(data);</code></p-fragment>
+<p-fragment><code class="language-js">const output = doc.svgString(); // '&lt;svg>...&lt;/svg>'</code></p-fragment></pre>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <iframe
+    allow="geolocation; microphone; camera; midi; encrypted-media"
+    data-lazy-src="https://glitch.com/embed/#!/embed/ssd3-pie-chart?path=server.js&previewSize=33"
+    alt="ssd3-pie-chart on Glitch"
+    style="height: 100%; width: 100%; border: 0;"></iframe>
+  <a class="self-center" href="https://glitch.com/edit/#!/ssd3-pie-chart">glitch.com/edit/#!/ssd3-pie-chart</a>
+</p-slide>
+    <p-slide>
+  <h1 class="center">
+    That's all, folks!<br>👋
+  </h1>
+</p-slide>
+<p-slide>
+  <h3 class="center final-link">
+    <a href="https://maxart2501.github.io/d3-talk/devromagna/">
+      maxart2501.github.io/d3-talk/devromagna/
+    </a>
+    <img src="img/qr-slides.svg" alt="QR Code for the presentation's link">
+  </h3>
+</p-slide>
+<p-slide>
+  <pre class="self-center big"><code class="language-js">for (const question of questions) {
+  await answer(question)
+}</code></pre>
+</p-slide>
+  </p-deck>
+  <div role="progressbar" class="presentation-progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+  <div role="toolbar" class="presentation-toolbar">
+    <button type="button" class="toggle-mode" title="Toggle speaker mode" aria-label="Toggle speaker mode (Alt-M)">
+      <svg viewBox="0 0 1 1"><path stroke-width="0.1" stroke="currentColor" fill="none" d="M.05 .5h.6v-.45h-.6v.9h.6v-.45M.75 .05h.25M.75 .2h.25M.75 .35h.25"/></svg>
+    </button>
+    <button type="button" class="fullscreen" title="Toggle fullscreen mode" aria-label="Toggle fullscreen mode">
+      <svg viewBox="0 0 1 1"><g stroke="currentColor" fill="none" stroke-width="0.1">
+        <path d="M.05 .3v-.25h.25M.7 .05h.25v.25M.95 .7v.25h-.25M.3 .95h-.25v-.25"/>
+        <path d="M.05 .3h.25v-.25M.7 .05v.25h.25M.95 .7h-.25v.25M.3 .95v-.25h-.25"/>
+      </g></svg>
+    </button>
+  </div>
+  <nav class="presentation-nav">
+    <button type="button" class="previous" title="Go backward" aria-label="Go backward"></button>
+    <button type="button" class="next" title="Go forward" aria-label="Go forward"></button>
+  </nav>
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/presentation.js"></script>
+  <script async src="vendor/prismjs/prism.js"></script>
+</body>
+
+</html>
