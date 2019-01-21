@@ -5,4 +5,4 @@
 - Francesco Strazzullo 
 - Marco Radossi
 - Nicola Iarocci
-- Nicola Iarocci 
+- Massimo Artizzu

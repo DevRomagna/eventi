@@ -1,0 +1,2 @@
+@page{margin:0;size:var(--slide-print-width) calc(var(--slide-print-width)/ var(--slide-aspect-ratio))}.presentation-nav,.presentation-progress,.presentation-toolbar{display:none}p-deck{position:static;display:block;font-size:calc(var(--slide-print-width) * var(--slide-font-size)/ 100)!important;-webkit-print-color-adjust:exact}p-slide{animation:none;page-break-after:always}
+/*# sourceMappingURL=print.css.map */
