@@ -17,4 +17,4 @@ più moderni (necessario supporto ai Web Components e agli ES modules).
 ## Materiale aggiuntivo
 
 - [Slides](https://maxart2501.github.io/d3-talk/devromagna/)
-- [Repo](https://github.com/e-xtrategy/frontend-frameworkless-development)
+- [Repo](https://github.com/MaxArt2501/d3-talk)
