@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>TypeScript: JavaScript on steroids for applications at scale</title>
+  <base href="..">
+  <link rel="shortcut icon" href="img/ts.png" type="image/png">
+  <link rel="stylesheet" href="vendor/prismjs/themes/prism-okaidia.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+  <link rel="stylesheet" href="css/presentation.css">
+</head>
+
+<body>
+  <p-deck>
+    <p-slide class="cover">
+  <h4>
+    <img src="img/ts-text.svg" alt="TypeScript logo" class="uff-logo">
+    JavaScript on steroids for applications at scale
+    <small>Imola, 2019-05-16</small>
+  </h4>
+  <div>
+    <img src="img/ts-logo.svg" alt="(Unofficial, although well-knows) logo of TypeScript" class="logo">
+    <img src="img/devromagna.svg" alt="Logo of DevRomagna.js" class="logo">
+  </div>
+</p-slide>
+<p-slide class="justify-start">
+  <img src="img/logo-antreem-border.svg" alt="Antreem logo" class="antreem-logo">
+  <div class="my-data">
+    <img src="img/maxart.jpg" alt="My face" class="my-face">
+    <h2>Massimo Artizzu</h2>
+    <p>
+      Web dev &amp; architect<br>
+      at <a href="https://antreem.com">Antreem</a>
+    </p>
+  </div>
+  <div class="my-info">
+    <h4>
+      <img src="img/twitter.svg" alt="Twitter logo"> /
+      <img src="img/github.svg" alt="GitHub logo">
+      @MaxArt2501
+    </h4>
+  </div>
+</p-slide>
+<p-slide class="center">
+  <h3>You can find these slides at</h3>
+  <img src="img/qr-slides.svg" alt="QR Code for the presentation's link" style="height: 7em; margin-bottom: 1em;">
+  <a href="https://maxart2501.github.io/typescript-talk/devromagna/">maxart2501.github.io/typescript-talk/devromagna/</a>
+</p-slide>
+    <p-slide class="center">
+  <h2><span class="js-text">JavaScript</span> is weakly typed</h2>
+  <p-fragment>
+    <img src="img/freedom.jpg" alt="Arms breaking handcuffs" style="width: 15em">
+  </p-fragment>
+</p-slide>
+<p-slide class="center">
+  <h2>&hellip; because it's not <em>Java</em></h2>
+  <p-fragment>
+    <img src="img/java.png" alt="Some verbose Java code" style="width: 15em" class="shadow">
+  </p-fragment>
+  <p-fragment>
+    <img src="img/panic.gif" alt="Panic!" style="width: 8em; clip-path: polygon(0 25%, 100% 25%, 100% 100%, 0% 100%); margin-top: -1em;" class="shadow">
+  </p-fragment>
+</p-slide>
+<p-slide class="center justify-center">
+  <h1>So&hellip; TypeScript.</h1>
+</p-slide>
+<p-slide>
+  <img src="img/butwhy.webp" alt="'But why?' surgeon meme" class="full-media">
+</p-slide>
+<p-slide class="center justify-center">
+  <img src="img/js-growth.png" alt="Chart showing the growth of JavaScript payloads from 2010 to 2019" style="width: 20em; margin-bottom: .5em;">
+  <p>Source: <a href="https://httparchive.org/reports/page-weight?start=earliest&end=latest&view=list#bytesJs">httparchive</a></p>
+</p-slide>
+<p-slide class="justify-center">
+  <h2 class="our-header">
+    The problems we're facing<br>
+    <small>with modern web development</small>
+  </h2>
+</p-slide>
+<p-slide>
+  <pre class="self-center language-javascript"><code>let total = costs.reduce(0, (num, sum) => num + sum);</code>
+
+<p-fragment><code>const answer = list.lastFind(item => item.id === 42);</code></p-fragment>
+
+<p-fragment><code>$.ajax({
+  url: '...', method: 'POST',
+  body: {...}, contentType: 'json'
+});</code></p-fragment></pre>
+</p-slide>
+<p-slide class="center justify-center">
+  <h1>What happens</h1>
+  <h3>with code just the team knows about?</h3>
+</p-slide>
+<p-slide>
+  <pre class="big self-center language-javascript"><code>function addToCart(🤔, 😰) {
+  ...
+}</code>
+
+<p-fragment><code>const car = new Car(🤨);</code></p-fragment>
+<p-fragment><code>car.engine = '🤞';</code></p-fragment>
+<p-fragment><code>car.setEngine('🤷‍♂️');</code></p-fragment>
+
+<p-fragment><code>config.apiRot = '🤪';</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <img src="img/freaking-out.gif" alt="Lego Movie characters freaking out" class="full-media">
+</p-slide>
+<p-slide class="random-features">
+  <p-fragment><pre><code class="language-javascript">let index: number;</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">interface User {
+  name: string;
+}</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">type Method = 'GET' | 'POST';</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">function capitalize(src: string) {}</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">class Car implements Vehicle {}</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">private readonly index: number;</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">request&lt;T>(url: string): Promise&lt;T></code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">type Guest = Partial&lt;User>;</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">let payload: {
+  [K in keyof Config]: Config[K];
+};</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">declare var jQuery;</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">import { Option } from 'fp-ts';</code></pre></p-fragment>
+  <p-fragment><pre><code class="language-javascript">enum Bool { TRUE, FALSE, FILE_NOT_FOUND };</code></pre></p-fragment>
+</p-slide>
+<p-slide class="center">
+  <h1>
+    <a href="https://www.typescriptlang.org/">typescriptlang.org</a>
+  </h1>
+  <p-fragment>(with some caveats&hellip;)</p-fragment>
+</p-slide>
+    <p-slide class="justify-center">
+  <h1 class="our-header">What's TypeScript?</h1>
+</p-slide>
+<p-slide class="justify-around center">
+  <img src="img/microsoft.svg" alt="Microsoft's logo" class="ms-logo">
+  <p-fragment>
+    <img src="img/ts-logo.svg" alt="TypeScript's logo" class="lang-logo">
+    <p-fragment>
+      <span style="font-size: 500%">⊂</span>
+      <img src="img/js-logo.svg" alt="JavaScript's logo" class="lang-logo">
+    </p-fragment>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">JavaScript plus&hellip;</h3>
+  <ul class="self-center">
+    <li>
+      <p-fragment>☝ types</p-fragment>
+    </li>
+    <li>
+      <p-fragment>✌ OOP concepts</p-fragment>
+    </li>
+    <li>
+      <p-fragment>🤟 stage 3+ features</p-fragment>
+    </li>
+  </ul>
+</p-slide>
+    <p-slide class="justify-center">
+  <h1 class="our-header">Getting started</h1>
+  <h4>Try everything on the spot!</h4>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">1. From <code>npm</code></h3>
+  <div>
+    <code>$ npm i -g typescript</code>
+    <div><p-fragment><code>$ tsc my-module.ts --out my-module.js</code></p-fragment></div>
+  </div>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">2. <code>ts-node</code></h3>
+  <div>
+    <code>$ npm i -g ts-node</code>
+    <div><p-fragment>Use it just like <code>node</code></p-fragment></div>
+    <div><p-fragment><code>$ ts-node my-module.ts</code></p-fragment></div>
+  </div>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">3. On the web</h3>
+  <div class="playground-slide">
+    <img src="img/playground.png" alt="TypeScript playground screenshot" class="shadow">
+    <img src="img/playground-qrcode.svg" aria-hidden="true" class="shadow">
+    <a href="https://typescript-play.js.org/">typescript-play.js.org</a>
+  </div>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">4. In your IDE</h3>
+  <img src="img/vscode.png" alt="A TypeScript file in VS Code" class="shadow" style="width: 15em">
+</p-slide>
+    <p-slide>
+  <h3 class="our-header">Using types</h3>
+  <pre class="big language-typescript"><code>let answer: number = 42;</code>
+<code>let name: string = 'Ford Prefect';
+let isAlien: boolean = true;
+let entity: symbol = Symbol('question');</code>
+<code>let whatever: any;</code></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Arrays</h4>
+  <pre class="big self-center language-typescript"><code>let fib: number[]      = [ 0, 1, 1, 2, 3, 5 ];</code>
+<code>let fib: Array&lt;number> = [ 0, 1, 1, 2, 3, 5 ];</code>
+
+<code>let point: [ number, number ] = [ 2, -1 ];</code></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Objects</h4>
+  <pre class="big self-center language-typescript"><code>let user: {
+  name: string,
+  email?: number
+} = { name: 'Emma' };</code>
+<p-fragment><code>let boundaries: {
+  [key: string]: number
+} = { min: 0, max: 100 };</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Functions</h4>
+  <pre class="big language-typescript"><code>function count(src: string, ref: string): number {
+  return source.split(ref).length - 1;
+}</code>
+
+<p-fragment><code>let minFn: (...items: string[]) => string;</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Generics</h4>
+  <pre class="big language-typescript self-center"><code>interface PagedList&lt;T> {
+  items: T[];
+  total: number;
+}</code>
+
+<p-fragment><code>function getResource&lt;T>(url: string): PagedList&ltT></code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Notable cases</h4>
+  <pre class="big language-typescript self-center"><code>const roles: Array&lt;string> =
+    [ 'USER', 'ADMIN', 'GUEST' ]</code>
+
+<p-fragment><code>let request: Promise&lt;Request> = fetch('...')
+let models: Promise&lt;Model[]> = request.json()</code></p-fragment>
+
+<p-fragment><code>let user$: Observable&lt;User></code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Type inference</h3>
+  <pre class="big language-typescript"><code>let answer = 42              // => number
+let states = ['on', 'off']   // => string[]
+let user = {name: 'Emma'}    // => {name: string}
+let none = null              // => any
+function count(...) { ... }
+        // (src: string, ref: string) => number</code></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">A case for functions</h4>
+  <pre class="big language-typescript"><code>function getCars() {
+  return getList&lt;Car>('...');
+}</code>
+<p-fragment><code>// () => PagedList&lt;Car></code></p-fragment>
+
+<p-fragment><code>getCars().</code><div class="suggestions upwards">
+  <ul>
+    <li class="property selected" data-desc="Car[]">items</li>
+    <li class="property">total</li>
+  </ul>
+</div></p-fragment>
+</pre>
+</p-slide>
+<p-slide>
+  <pre class="big show-all language-typescript"><code>function getCars(): Car[] {</code>
+  <p-fragment><code class="error">return getList&lt;Car>('...');</code><div class="suggestions">
+    <ul>
+      <li class="message" data-error="ts2322">Type 'PagedList&lt;Car>' is not assignable to type 'Car[]'.</li>
+    </ul>
+  </div></p-fragment>
+}</pre>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Type aliases</h3>
+  <p-fragment><pre class="big language-typescript"><code>type Point2D = [ number, number ]</code>
+<p-fragment><code>type User = { id: number, name: string }</code></p-fragment>
+<p-fragment><code>type Method = 'GET' | 'POST' | 'DELETE'</code></p-fragment>
+<p-fragment><code>type Files = HTMLInputElement['files'] // File[]</code></p-fragment>
+<p-fragment><code>type CountFn = typeof count</code></p-fragment></pre></p-fragment>
+</p-slide>
+    <p-slide>
+  <h3 class="our-header">What defines a type? 🤔</h3>
+  <p-fragment>
+    <pre class="big language-typescript"><code>type Point2D = [ number, number ];</code>
+
+<p-fragment><code>interface User { ... }</code></p-fragment>
+
+<p-fragment><code>class Button { ... }</code></p-fragment>
+
+<p-fragment><code>enum LogLevel { WARN, ... }</code></p-fragment></pre>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">
+    Why <code>interface</code>s? 🤷‍♀️
+    <p-fragment><small>(and not <code>type</code>s)</small></p-fragment>
+  </h3>
+  <p-fragment>
+    <h4 class="big-x-wrapper center">
+      "Type aliases cannot be extended or implemented from (nor can they extend/implement other types)"
+      <p-fragment><span class="big-x"></span></p-fragment>
+    </h4>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <div class="two-columns">
+    <pre class="big language-typescript"><code>interface Loggable {
+  username: string;
+  login(): boolean;
+}
+class User
+  implements Loggable
+  { ... }</code></pre>
+    <p-fragment><pre class="big language-typescript"><code>type Loggable = {
+  username: string;
+  login(): boolean;
+}
+class User
+  implements Loggable
+  { ... }</code></pre></p-fragment>
+  </div>
+</p-slide>
+<p-slide>
+  <pre class="big self-center language-typescript"><p-fragment><code>interface Admin extends Loggable {
+  addUser(user: User): boolean;
+}</code></p-fragment>
+
+<p-fragment><code>type SuperAdmin = Admin & {
+  deleteUser(user: User): boolean;
+}</code></p-fragment></pre>
+</p-slide>
+<p-slide class="center justify-start unpadded">
+  <img src="img/celebrating.gif" alt="Stephen Colbert dancing" class="full-media">
+  <h2 class="meme-text blink">Old documentation rocks!</h2>
+</p-slide>
+<p-slide>
+  <div class="two-columns center">
+    <div>
+      <h3><code>type</code> aliases</h3>
+      👇
+      <p>type shortenings and manipulations</p>
+    </div>
+    <div>
+      <h3><code>interface</code></h3>
+      👇
+      <p>object <em>shape</em> definitions</p>
+    </div>
+  </div>
+</p-slide>
+<p-slide>
+  <h1 class="our-header">Models</h1>
+</p-slide>
+<p-slide>
+  <div class="two-columns center">
+    <div>
+      <pre class="big language-typescript"><code>// models/car.ts
+interface Car {
+  model: string;
+  brand: Brand;
+  engine: Engine;
+}</code></pre>
+      <pre class="big language-typescript"><code>// models/brand.ts
+interface Brand {
+  name: string;
+}</code></pre>
+    </div>
+    <div>
+      <pre class="big language-typescript"><code>// models/engine.ts
+interface Engine {
+  model: string;
+  fuel: FuelType;
+  size?: number;
+}</code></pre>
+      <pre class="big language-typescript"><code>// models/fuel-type.ts
+enum FuelType {
+  GASOLINE, DIESEL
+}</code></pre>
+    </div>
+  </div>
+</p-slide>
+<p-slide class="center">
+  <div class="two-columns align-center">
+    <div>
+      <img src="img/drake-bad.webp" alt="Drake 'bad' meme" style="width: 7em">
+    </div>
+    <pre class="language-typescript"><code>class Brand {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+}</code></pre>
+  </div>
+  <p-fragment>
+    <div class="two-columns align-center">
+      <div>
+        <img src="img/drake-good.webp" alt="Drake 'bad' meme" style="width: 7em">
+      </div>
+      <pre class="language-typescript"><code>interface Brand {
+  name: string;
+}
+
+const brand: Brand = {
+  name: 'Toyota'
+};</code></pre>
+    </div>
+  </p-fragment>
+</p-slide>
+    <p-slide>
+  <h2 class="our-header">Operations on types</h2>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Type intersection</h4>
+  <p-fragment class="self-center">
+    <pre class="big language-typescript"><code>type User = { username: string; }
+type Creator = {
+  addUser: (username: string) => boolean;
+}</code>
+
+<p-fragment><code>type Admin = User & Creator;</code></p-fragment></pre>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <svg viewBox="0 0 150 100" style="width: 12em">
+    <circle cx="50" cy="50" r="49.5" stroke="#000" fill="#f60"/>
+    <circle cx="100" cy="50" r="49.5" stroke="#000" fill="#2fa"/>
+    <path d="M75,7.132A49.5,49.5 0 0 1 75,92.868 49.5,49.5 0 0 1 75,7.132" stroke="#000" fill="#ffa" stroke-width="1"/>
+    <text x="25" y="50" text-anchor="middle" font-size="15%">User</text>
+    <text x="75" y="50" text-anchor="middle" font-size="15%">Admin</text>
+    <text x="125" y="50" text-anchor="middle" font-size="15%">Creator</text>
+  </svg>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Type union</h4>
+  <p-fragment class="self-center">
+    <pre class="big language-typescript"><code>function utter(answer: string | number) {
+  console.log(`The answer is ${answer}`);
+}</code>
+<p-fragment><code>class Family {
+  pet: Cat | Dog;
+}</code></p-fragment>
+<p-fragment><code>type Method = 'GET' | 'POST' | 'DELETE';</code></p-fragment></pre>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Type guards</h3>
+</p-slide>
+<p-slide>
+  <pre class="big show-all language-typescript"><code>function getValue(
+  element: HTMLInputElement | HTMLSelectElement
+) {
+  if (element.matches('.my-select')) {
+    const index = element.</code><code class="error">selectedIndex</code>;
+    <code>return element.</code><code class="error">options</code><p-fragment><div class="suggestions">
+  <ul style="width: 20em; left: -4em; top: 0.4em;">
+    <li class="message">Property 'options' does not exist on type 'HTMLInputElement | HTMLSelectElement'.</li>
+    <li class="message">&nbsp;&nbsp;&nbsp;Property 'options' does not exist on type 'HTMLInputElement'.</li>
+  </ul>
+</div></p-fragment><code>[index].text;
+  }
+  return element.value;
+}</code></pre>
+</p-slide>
+<p-slide>
+  <pre class="big language-typescript"><code>const index = (&lt;HTMLSelectElement>element)
+  .selectedIndex;
+return (element as HTMLSelectElement)
+  .options[index].text;</code></pre>
+  <p-fragment>
+    <pre class="big language-typescript"><code>if (element instanceof HTMLSelectElement) {
+  const index = element.selectedIndex;
+  return element.options[index].text;
+}</code></pre>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Kinds of type guards</h4>
+  <pre class="big language-typescript"><p-fragment><code>if (typeof value === 'string') { ... }</code></p-fragment>
+
+<p-fragment><code>if (ref instanceof HTMLElement) { ... }</code></p-fragment>
+
+<p-fragment><code>if ('value' in item) { ... }</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h3 class="our-header">Tagged unions</h3>
+</p-slide>
+<p-slide>
+  <div class="two-columns align-center">
+    <pre class="big language-typescript"><code>interface Ticket {
+  kind: 'TICKET';
+  quantity: number;
+}
+interface Seasonal {
+  kind: 'SEASONAL';
+  price: number;
+}</code></pre>
+    <p-fragment>
+    <pre class="big language-typescript"><code>type Item =
+  | Ticket
+  | Seasonal
+
+type Kinds
+  = Item['kind']
+// 'TICKET'|'SEASONAL'</code></pre>
+    </p-fragment>
+  </div>
+</p-slide>
+<p-slide>
+  <pre class="big self-center language-typescript"><code>function getPrice(item: Item) {
+  if (item.kind === 'TICKET') {
+    return item.quantity * TICKET_PRICE;
+  }
+  return item.price;
+}</code></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header">Custom type guards</h4>
+  <p-fragment class="self-center">
+    <pre class="language-typescript"><code>function isTicket(item: Item): item is Ticket {
+  return item.kind === 'TICKET';
+}</code>
+
+<p-fragment><code>function getPrice(item: Item) {
+  if (isTicket(item)) {
+    return item.quantity * TICKET_PRICE;
+  }
+  return item.price;
+}</code></p-fragment></pre>
+    </p-fragment>
+</p-slide>
+<p-slide>
+  <h2 class="our-header">Conditional types</h2>
+</p-slide>
+<p-slide>
+  <pre class="big language-typescript self-center"><code>T extends U ? X : Y</code></pre>
+</p-slide>
+<p-slide>
+  <pre class="big language-typescript self-center"><code>type Exclude&lt;T, U> = T extends U ? never : T</code>
+
+<p-fragment><code>type NonNullable&lt;T> = Exclude&lt;T, null | undefined></code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <pre class="big language-typescript self-center"><code>interface UserWithId {
+  id: string;
+  name: string;
+}</code>
+<p-fragment><code>type UserKeys = keyof UserWithId; // 'id' | 'name'</code></p-fragment>
+
+<p-fragment><code>type User = {
+  [K in Exclude&lt;UserKeys, 'id'>]: UserWithId[K];
+};</code></p-fragment><p-fragment><code> // { name: string }</code></p-fragment></pre>
+</p-slide>
+<p-slide class="unpadded">
+  <pre class="big language-typescript self-center"><code>type MethodNames&lt;T> = {</code>
+  <p-fragment><code>[K in keyof T]: </code></p-fragment><p-fragment><code>T[K] extends Function</code></p-fragment> <p-fragment><code>? K</code></p-fragment> <p-fragment><code>: never;</code></p-fragment>
+}</code><p-fragment><code>[keyof T];</code></p-fragment>
+
+<p-fragment><code>interface Dog {
+  name: string;
+  bark: () => string;
+  walk: (mins: number) => void;
+}</code></p-fragment>
+<p-fragment><code>type DogActions = MethodNames&lt;Dog>;</code></p-fragment><p-fragment><code> // 'bark'|'walk'</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <pre class="big language-typescript self-center"><code>interface IndexAction {
+  kind: 'INDEX';
+  index: number;
+}
+interface TitleAction {
+  kind: 'TITLE';
+  title: string;
+}
+type Action = IndexAction | TitleAction;</code></pre>
+</p-slide>
+<p-slide>
+  <pre class="big language-typescript self-center"><code>type GetFromKind&lt;A, T>
+  = A extends { kind: T } ? A : never;</code>
+
+<p-fragment><code>type ActionFromKind&lt;T extends Action['kind']>
+  = GetFromKind&lt;Action, T>;</code></p-fragment>
+
+<p-fragment><code>ActionFromKind&lt;'INDEX'> // IndexAction</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <img src="img/headache.gif" alt="A man having a headache" class="full-media">
+</p-slide>
+    <p-slide class="center">
+  <h3>Where do all those definitions come from?</h3>
+</p-slide>
+<p-slide>
+  <pre class="big self-center language-js"><code>// tsconfig.json
+"compilerOptions": {
+  ...,
+  "lib": [ "es2018", "dom" ]
+}</code></pre>
+</p-slide>
+<p-slide>
+  <div class="two-columns align-center">
+  <pre class="self-center">&#128194; node_modules
+  &#128194; axios
+    &#128214; changelog.md
+    &#128214; <b>index.d.ts</b>
+    &#128214; package.json
+    &hellip;</pre>
+    <p-fragment>
+      <pre class="big language-js"><code>// packages.json
+...
+"typings": "types.d.ts"</code></pre>
+    </p-fragment>
+  </div>
+</p-slide>
+<p-slide class="center">
+  <h3>What about other packages?</h3>
+</p-slide>
+<p-slide class="center">
+  <h2><a href="https://definitelytyped.org/">definitelytyped.org</a></h2>
+</p-slide>
+<p-slide>
+  <code>npm i -D @types/jquery</code>
+  <p-fragment>
+    <pre class="big language-js"><code>// tsconfig.json
+"compilerOptions": {
+  ...,
+  "typeRoots": [ "node_modules/@types" ]
+}</code></pre>
+  </p-fragment>
+</p-slide>
+<p-slide class="center justify-start unpadded">
+  <h2 class="meme-text uppercase blink">Functional Programming Powers!</h2>
+  <img src="img/genie.gif" alt="Aladdin's genie" class="full-media">
+</p-slide>
+<p-slide class="center">
+  <img src="img/fp-ts-logo.png" alt="Logo of fp-ts" style="width: 6em">
+  <h2><a href="https://github.com/gcanti/fp-ts">github.com/gcanti/fp-ts</a></h2>
+</p-slide>
+<p-slide>
+  <pre class="big self-center language-typescript"><code>const optionalUser: Option&lt;User>
+  = fromNullable(user);</code>
+<p-fragment><code>const userName = optionalUser
+  .map(user => `${user.name} ${user.surname}`)
+  .getOrElse('-');</code></p-fragment></pre>
+</p-slide>
+<p-slide class="center">
+  <h1>Linting? 🤔</h1>
+</p-slide>
+<p-slide class="center">
+  <h3>TSLint</h3>
+  <div>
+    <code>no-any</code>
+    <code>no-empty-interface</code>
+    <code>no-inferrable-types</code>
+    <code>no-internal-module</code>
+    <code>no-non-null-assertion</code>
+    <code>no-unnecessary-type-assertion</code>
+    <code>no-var-requires</code>
+    <code>typedef</code>
+    <code>unified-signatures</code>
+    <code>await-promise</code>
+    <code>no-misused-new</code>
+    <code>no-unsafe-any</code>
+    <code>no-unused-variable</code>
+    <code>prefer-readonly</code>
+    <code>interface-over-type-literal</code>
+    <code>no-angle-bracket-type-assertion</code>
+    &hellip;
+  </div>
+</p-slide>
+<p-slide class="center">
+  <h3>&hellip; or maybe ESLint + TypeScript?</h3>
+</p-slide>
+    <p-slide>
+  <h2 class="our-header">TypeScript compiler options</h2>
+</p-slide>
+<p-slide>
+  <h4 class="our-header"><code>--strictNullChecks</code></h4>
+  <pre class="big show-all language-typescript"><code>let</code> <code class="error">index</code><p-fragment><div class="suggestions">
+    <ul style="width: 16em">
+      <li class="message"><code class="language-typescript">let index: number</code></li>
+      <li class="message" data-error="ts2322">Type 'null' is not assignable to type 'number'.</li>
+    </ul>
+  </div></p-fragment><code>: number = null;</code></pre>
+</p-slide>
+<p-slide>
+  <pre class="big self-center language-typescript"><code>function getMailLink(user: User) {
+  return `mailto:${user.email}`;
+}</code>
+
+<p-fragment><code>getMailLink(null); // BOOM</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header"><code>--noImplicitAny</code></h4>
+  <pre class="big show-all language-typescript"><code>function sum(</code><code class="error">list</code><code>) { ... }</code>
+
+<p-fragment><code>class MainComponent {</code>
+  <code class="error">index</code><p-fragment><div class="suggestions">
+    <ul style="width: 20em">
+      <li class="message">(property) <code class="language-typescript">MainComponent.index: any</code></li>
+      <li class="message" data-error="ts7008">Member 'foo' implicitly has an 'any' type.</li>
+    </ul>
+  </div></p-fragment>;
+<code>}</code></p-fragment></pre>
+</p-slide>
+<p-slide>
+  <h4 class="our-header"><code>--strict</code></h4>
+  <p-fragment class="self-center">
+    <ul>
+      <li><code>--noImplicitAny</code></li>
+      <li><code>--noImplicitThis</code></li>
+      <li><code>--alwaysStrict</code></li>
+      <li><code>--strictBindCallApply</code></li>
+      <li><code>--strictNullChecks</code></li>
+      <li><code>--strictFunctionTypes</code></li>
+      <li><code>--strictPropertyInitialization</code></li>
+    </ul>
+  </p-fragment>
+</p-slide>
+<p-slide>
+  <h4 class="our-header"><code>--target</code></h4>
+  <p-fragment class="self-center">
+    <ul class="two-columns" style="width: 10em; line-height: 1.5">
+      <li><code>ES3</code></li>
+      <li><code>ES5</code></li>
+      <li><code>ES2015</code></li>
+      <li><code>ES2016</code></li>
+      <li><code>ES2017</code></li>
+      <li><code>ES2018</code></li>
+      <li><code>ESNext</code></li>
+    </ul>
+  </p-fragment>
+</p-slide>
+<p-slide class="center">
+  <h4><a href="https://www.typescriptlang.org/docs/handbook/compiler-options.html">typescriptlang.org/docs/handbook/compiler-options.html</a></h4>
+</p-slide>
+    <p-slide class="center justify-center">
+  <img src="img/ts-popularity.png" alt="Chart showing the growth of TypeScript downloads from NPM from October 2017 to April 2019" style="width: 20em; margin-bottom: .5em;">
+  <p>Source: <a href="https://www.npmtrends.com/typescript-vs-flow-bin-vs-elm">npmtrends.com</a></p>
+</p-slide>
+<p-slide class="center">
+  <h1>Bad reasons</h1>
+  <h4>to use TypeScript</h4>
+</p-slide>
+<p-slide class="center">
+  <h3>"It looks more like Java/C#, so I don't have to learn JavaScript"</h3>
+</p-slide>
+<p-slide class="center justify-end">
+  <img src="img/one-does-not-simply.webp" alt="'One does not simply' Aragorn meme" class="full-media">
+  <h3 class="meme-text">One does not simply ignore JavaScript</h3>
+</p-slide>
+<p-slide class="center">
+  <h3>"No more unit tests!"</h3>
+</p-slide>
+<p-slide class="center">
+  <h4>
+    "Only" <a href="https://blog.acolyer.org/2017/09/19/to-type-or-not-to-type-quantifying-detectable-bugs-in-javascript/">15% of bugs</a>
+    are type related and could be prevented by TypeScript or other static typing systems (2017).
+  </h4>
+</p-slide>
+<p-slide>
+  <img src="img/disappointed.gif" alt="Mr. Bean disappointed" class="full-media">
+</p-slide>
+<p-slide class="center">
+  <h3>"My code won't have runtime type problems anymore"</h3>
+</p-slide>
+<p-slide>
+  <pre class="big language-typescript self-center"><code>function getUsers(): Promise&lt;User[]> {
+  return fetch('...')
+    .then(response => response.json());
+}</code></pre>
+</p-slide>
+<p-slide>
+  <pre class="big language-typescript self-center"><code>function getFullName(user: User) {
+  return user.surname.toUpperCase() +
+    ' ' + user.name;
+}</code>
+
+<p-fragment><code>const fullName = getFullName(
+  { name: 'Umad' } as User
+);</code></p-fragment></pre>
+<p-fragment><img src="img/dancing-troll.gif" alt="Dancing troll meme" class="full-media"></p-fragment>
+</p-slide>
+    <p-slide>
+  <h4 class="our-header">Links</h4>
+  <ul class="links">
+    <li>
+      🔗 Interface vs Type alias in TypeScript 2.7 <small>@martin_hotell</small>
+      <a href="https://medium.com/@martin_hotell/interface-vs-type-alias-in-typescript-2-7-2a8f1777af4c">
+        medium.com/@martin_hotell/interface-vs-type-alias-in-typescript-2-7-2a8f1777af4c
+      </a>
+    </li>
+    <li>
+      🔗 TypeScript 2.8: Conditional Types <small>@mariusschulz</small>
+      <a href="https://mariusschulz.com/blog/typescript-2-8-conditional-types">mariusschulz.com/blog/typescript-2-8-conditional-types</a>
+    </li>
+    <li>
+      🔗 Why use TypeScript, good and bad reasons <small>@whereischarly</small>
+      <a href="https://itnext.io/why-use-typescript-good-and-bad-reasons-ccd807b292fb">itnext.io/why-use-typescript-good-and-bad-reasons-ccd807b292fb</a>
+    </li>
+    <li>
+      🔗 Italia JS Slack #typescript channel
+      <a href="https://italiajs.slack.com/messages/CAHLHRZAQ/">italiajs.slack.com/messages/CAHLHRZAQ/</a>
+    </li>
+  </ul>
+</p-slide>
+    <p-slide>
+  <h1 class="center">
+    That's all, folks!<br>👋
+  </h1>
+</p-slide>
+<p-slide>
+  <h3 class="center final-link">
+    <a href="https://maxart2501.github.io/typescript-talk/devromagna/">
+      maxart2501.github.io/typescript-talk/devromagna/
+    </a>
+    <img src="img/qr-slides.svg" alt="QR Code for the presentation's link">
+  </h3>
+</p-slide>
+<p-slide>
+  <pre class="self-center big"><code class="language-typescript">const question: Question[] = await getQuestions()
+questions.forEach((question: Question) => {
+  question.answer()
+})</code></pre>
+</p-slide>
+  </p-deck>
+  <div role="progressbar" class="presentation-progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+  <div role="toolbar" class="presentation-toolbar">
+    <button type="button" class="toggle-mode" title="Toggle speaker mode" aria-label="Toggle speaker mode (Alt-M)">
+      <svg viewBox="0 0 1 1"><path stroke-width="0.1" stroke="currentColor" fill="none" d="M.05 .5h.6v-.45h-.6v.9h.6v-.45M.75 .05h.25M.75 .2h.25M.75 .35h.25"/></svg>
+    </button>
+    <button type="button" class="fullscreen" title="Toggle fullscreen mode" aria-label="Toggle fullscreen mode">
+      <svg viewBox="0 0 1 1"><g stroke="currentColor" fill="none" stroke-width="0.1">
+        <path d="M.05 .3v-.25h.25M.7 .05h.25v.25M.95 .7v.25h-.25M.3 .95h-.25v-.25"/>
+        <path d="M.05 .3h.25v-.25M.7 .05v.25h.25M.95 .7h-.25v.25M.3 .95v-.25h-.25"/>
+      </g></svg>
+    </button>
+  </div>
+  <nav class="presentation-nav">
+    <button type="button" class="previous" title="Go backward" aria-label="Go backward"></button>
+    <button type="button" class="next" title="Go forward" aria-label="Go forward"></button>
+  </nav>
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/presentation.js"></script>
+  <script defer src="vendor/prismjs/prism.js"></script>
+  <script defer src="vendor/prismjs/components/prism-typescript.js"></script>
+</body>
+
+</html>
