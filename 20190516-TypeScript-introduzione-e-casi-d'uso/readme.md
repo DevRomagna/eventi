@@ -1,5 +1,5 @@
-TypeScript: JavaScript on steroids for applications at scale
-============================================================
+TypeScript: introduzione e casi d'uso
+=====================================
 
 - Data: 16 Maggio 2019
 - Location: Antreem, Imola
