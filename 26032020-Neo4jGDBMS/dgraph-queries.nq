@@ -1,0 +1,155 @@
+#########################
+# Schema
+# Schema > Bulk edit > Paste > Apply Schema
+#
+
+username: string @index(exact, term) @upsert .
+group: [uid] .
+resources: [uid] .
+name: string @index(hash) .
+password: password .
+
+type User {
+  username
+  password
+  group
+  resources
+}
+
+type Group {
+  name
+  resources
+}
+
+type Resource {
+  name
+}
+
+#########################
+# Queries
+
+{
+  set {
+    _:r <dgraph.type> "Resource" .
+    _:r <name> "query_file.nq" .
+    
+    _:g <dgraph.type> "Group" .
+    _:g <resources> _:r .
+    
+    _:a <dgraph.type> "User" .
+    _:a <username> "Luca" .
+  	_:a <password> "123456" .
+    _:a <resources> _:r .
+  }
+}
+
+# get user data for "Luca"
+{
+  user(func: type("User")) @filter(eq(username, "Luca")) {
+    username
+  	password
+  	group {
+      name
+      resources {
+        name
+      }
+    }
+  	resources {
+      name
+    }
+  }
+}
+
+# Add a name to the group and assign Luca to the same group
+upsert {
+  query {
+    var(func: type("User")) @filter(eq(username, "Luca")) {
+      u as uid
+    }
+    var(func: type("Group")) {
+      g as uid
+    }
+  }
+  mutation {
+    set {
+      uid(u) <group> uid(g) .
+      uid(g) <name> "Database users" .
+    }
+  }
+}
+
+# remove direct access to resource for Luca
+upsert {
+  query {
+    var(func: type("User")) @filter(eq(username, "Luca")) {
+      u as uid
+    }
+  }  
+  
+  mutation {
+    delete {
+      uid(u) <resources> * .
+    }
+  }
+}
+
+# add "can_write" facet
+upsert {
+  query {
+    var(func: type("User")) @filter(eq(username, "Luca")) {
+      u as uid
+    }
+    
+    var(func: type("Resource")) @filter(eq(name, "query_file.nq")) {
+      r as uid
+    }
+  }  
+  
+  mutation {
+    set {
+      uid(u) <resources> uid(r) (can_write=true) .
+    }
+  }
+}
+
+# query with facets
+{
+  user(func: type("User")) @filter(eq(username, "Luca")) {
+    username
+  	password
+  	group {
+      name
+      resources @facets {
+        name
+      }
+    }
+  	resources @facets {
+      name
+    }
+  }
+}
+
+# add new resource and add to group.
+# add a resources relation to "Luca" with facet deny=true
+upsert {
+  query {
+    var(func: type("User")) @filter(eq(username, "Luca")) {
+      u as uid
+    }
+    
+    var(func: type("Group")) @filter(eq(name, "Database users")) {
+			g as uid
+    }
+  } 
+  
+  mutation {
+    set {
+      _:r <dgraph.type> "Resource" .
+      _:r <name> "deny.file" .
+      
+      uid(g) <resources> _:r .
+      
+      uid(u) <resources> _:r (deny=true) .
+    }
+  }
+}
